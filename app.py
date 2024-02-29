@@ -3,13 +3,15 @@ from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
 import blockChain
+import os
+import json
 
 app = Flask(__name__)
 
 app.secret_key = 'your secret key'
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Adhulya' 
+app.config['MYSQL_PASSWORD'] = '1234' 
 app.config['MYSQL_DB'] = 'FRS'
 
 mysql = MySQL(app)
@@ -149,7 +151,7 @@ def adddata():
             make_proof = request.form['make_proof']
         except Exception:
             make_proof = False
-        blockChain.write_block(text, make_proof)
+        blockChain.write_block(text, record_id, vname, vage, vgender, vphy, vuni, vex, vint, vdeath, vevidence, vresult, make_proof)
 
         if not record_id  or not vname or not vage or not vgender or not vphy or not vuni or not vex or not vint or not vdeath or not vevidence or not vresult:
             msg = 'Please Fill All the Fields'
@@ -157,7 +159,7 @@ def adddata():
         else:
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('INSERT INTO record VALUES (NULL, %s, %s, %s, %s ,%s, %s, %s, %s, %s,%s)',
-                           (record_id, vname, vage, vgender ,vphy, vuni, vex, vint, vdeath, vevidence, vresult,))
+                           (vname, vage, vgender ,vphy, vuni, vex, vint, vdeath, vevidence, vresult))
             mysql.connection.commit()
             msg = 'Data Successfully stored into Block chain'
         return render_template('blockchain.html', msg=msg)
@@ -267,6 +269,20 @@ def pregister():
         return render_template('panel.html', msg=msg, username=username)
 
 
+@app.route('/test', methods=['GET'])
+def test():
+    return render_template('panel.html')
 
+
+@app.route('/outputTable', methods=['GET'])
+def generate_html_from_json_folder():
+    results = blockChain.check_blocks_integrity()
+    return render_template('output.html', results=results)
+
+
+    
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8000)
+
+
+

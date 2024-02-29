@@ -12,11 +12,24 @@ def check_blocks_integrity():
     for i in range(2, int(get_next_block())):
         prev_index = str(i - 1)
         cur_index = str(i)
-        tmp = {'block': '', 'result': '', 'proof': ''}
+        tmp = {'block': '', 'result': '', 'proof': '','text':''}
         try:
             file_dict = json.load(open(BLOCKCHAIN_DIR + cur_index + '.json'))
             cur_hash = file_dict['prev_hash']
             cur_proof = file_dict['proof']
+            cur_text= file_dict['text']
+            curr_record_id = file_dict['record_id'];
+            cur_name = file_dict['name']
+            cur_age = file_dict['age']
+            cur_gender = file_dict['gender']
+            cur_phy= file_dict['phy']
+            cur_uni = file_dict['uni']
+            cur_ex = file_dict['ex']
+            cur_int = file_dict['int']
+            cur_death = file_dict['death']
+            cur_evidence = file_dict['evidence']
+            cur_result = file_dict['vresult']
+            
         except Exception as e:
             print(e)
 
@@ -27,6 +40,18 @@ def check_blocks_integrity():
 
         tmp['block'] = prev_index
         tmp['proof'] = cur_proof
+        tmp['text'] = cur_text
+        tmp['record_id'] = curr_record_id
+        tmp['name'] = cur_name
+        tmp['age'] = cur_age
+        tmp['gender'] = cur_gender
+        tmp['phy'] = cur_phy
+        tmp['uni'] = cur_uni
+        tmp['ex'] = cur_ex
+        tmp['int'] = cur_int
+        tmp['death'] = cur_death
+        tmp['evidence'] = cur_evidence
+        tmp['vresult'] = cur_result
         if cur_hash == prev_hash:
             tmp['result'] = 'ok'
         else:
@@ -105,7 +130,7 @@ def get_POW(file_name, difficulty=1):
         json.dump(cur_block, file, indent=4, ensure_ascii=False)
 
 
-def write_block(text, make_proof=False):
+def write_block(text, record_id, vname, vage, vgender, vphy, vuni, vex, vint, vdeath, vevidence, vresult, make_proof=False):
     cur_index = get_next_block()
     prev_index = str(int(cur_index) - 1)
     prev_block_hash = get_hash(prev_index)
@@ -113,8 +138,19 @@ def write_block(text, make_proof=False):
             'prev_hash': prev_block_hash,
             'timestamp': time(),
             'proof': -1,
-            'index': cur_index
-            }
+            'index': cur_index,
+            'record_id': record_id,
+            'name': vname,
+            'age': vage,
+            'gender': vgender,
+            'phy': vphy,
+            'uni': vuni,
+            'ex': vex,
+            'int': vint,
+            'death': vdeath,
+            'evidence': vevidence,
+            'vresult': vresult
+        }
 
     with open(BLOCKCHAIN_DIR + cur_index + '.json', 'w') as file:
         json.dump(data, file, indent=4, ensure_ascii=False)
