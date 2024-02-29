@@ -1,43 +1,61 @@
-{% extends "base.html" %} {% block content %}
-<br />
-<hr />
-{% endblock %} {% block check %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Records</title>
+  </head>
+  <body>
+    {% block content %}
+    <br />
+    <hr />
+    {% endblock %} {% block check %}
 
-<hr />
-<table>
-  <thead>
-    <tr>
-      <th>Record ID</th>
-      <th>Victim's Name</th>
-      <th>Age</th>
-      <th>Gender</th>
-      <th>Physical Charecteristics</th>
-      <th>Unique Features</th>
-      <th>External Injury</th>
-      <th>Internal Injury</th>
-      <th>Cause Of Death</th>
-      <th>Evidence</th>
-      <th>Examination Result</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for result in results %}
-    <tr>
-      <td>{{result['record_id'] }}</td>
-      <td>{{result['name'] }}</td>
-      <td>{{result['age'] }}</td>
-      <td>{{result['gender'] }}</td>
-      <td>{{result['phy'] }}</td>
-      <td>{{result['uni'] }}</td>
-      <td>{{result['ex'] }}</td>
-      <td>{{result['int'] }}</td>
-      <td>{{result['death'] }}</td>
-      <td>{{result['evidence'] }}</td>
-      <td>{{result['vresult'] }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-<br />
-{% endblock %}
-<hr />
+    <center>
+      <h1>Records</h1>
+    </center>
+
+    <hr />
+    <table>
+      <thead>
+        <tr>
+          <th>Record ID</th>
+          <th>Victim's Name</th>
+          <th>Age</th>
+          <th>Gender</th>
+          <th>Physical Charecteristics</th>
+          <th>Unique Features</th>
+          <th>External Injury</th>
+          <th>Internal Injury</th>
+          <th>Cause Of Death</th>
+          <th>Evidence</th>
+          <th>Examination Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for result in results %}
+        <tr>
+          <td>{{result['record_id'] }}</td>
+          <td>{{result['name'] }}</td>
+          <td>{{result['age'] }}</td>
+          <td>{{result['gender'] }}</td>
+          <td>{{result['phy'] }}</td>
+          <td>{{result['uni'] }}</td>
+          <td>{{result['ex'] }}</td>
+          <td>{{result['int'] }}</td>
+          <td>{{result['death'] }}</td>
+          <td>{{result['evidence'] }}</td>
+          <td>{{result['vresult'] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <br />
+    {% endblock %}
+    <hr />
+    <br />
+    <div>
+      <center><a href="users_home.html">Go Back</a></center>
+    </div>
+  </body>
+</html>

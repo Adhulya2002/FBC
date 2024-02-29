@@ -15,7 +15,7 @@ app.config['MYSQL_PASSWORD'] = '1234'
 app.config['MYSQL_DB'] = 'FRS'
 
 mysql = MySQL(app)
-
+username= ''
 
 @app.route('/')
 @app.route('/index')
@@ -31,6 +31,19 @@ def home():
 @app.route('/panel.html')
 def panel():
     return render_template('panel.html')
+
+#temp
+@app.route('/panelhome.html',methods=['get'])
+def panelhome():
+    #username = request.form['username']
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("select * from bookdata")
+    print("INN")
+    data = cursor.fetchall()
+    print(data)
+    # Redirect to home page
+    return render_template('panelhome.html', data=data, username=username)
+    
 
 
 @app.route('/users.html')
@@ -61,6 +74,10 @@ def blockchain():
 @app.route('/panelregister.html')
 def panelregiter():
     return render_template("panelregister.html")
+
+@app.route('/message.html')
+def successMessage():
+    return render_template('message.html')
 
 
 @app.route('/logout')
@@ -222,17 +239,34 @@ def panellogin():
             session['logged'] = True
             session['id'] = account['id']
             session['username'] = account['username']
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute("select * from bookdata")
-            print("INN")
-            data = cursor.fetchall()
-            print(data)
-            # Redirect to home page
-            return render_template('panelhome.html', data=data, username=username)
+            return render_template('book.html')
 
         else:
             msg = 'Incorrect username/password!'
         return render_template('panel.html', msg=msg)
+    
+@app.route('/panelbook', methods=['post', 'get'])
+def panelbook():
+    if request.method == "get":
+        return f"The URL /data is accessed directly. Try going to '/form' to submit form"
+    else:
+        msg = ''
+        username = request.form['name']
+        address = request.form['age']
+        forensicdetail = request.form['forensicdetail']
+        time = request.form['time']
+        patient_id = request.form['patid']
+        if not username or not address or not forensicdetail or not time or not patient_id:
+            msg = 'Please Fill All the Fields'
+            return render_template('book.html', msg=msg)
+        else:
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('INSERT INTO bookdata VALUES (NULL, %s, %s, %s, %s, %s)',
+                           (username, address, forensicdetail, time, patient_id))
+            mysql.connection.commit()
+            msg = 'Data Successfully stored into Block chain'
+            print(msg)
+        return render_template('message.html', msg=msg)
 
 
 @app.route('/pregister', methods=['post', 'get'])
@@ -279,8 +313,7 @@ def generate_html_from_json_folder():
     results = blockChain.check_blocks_integrity()
     return render_template('output.html', results=results)
 
-
-    
+  
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8000)
 
