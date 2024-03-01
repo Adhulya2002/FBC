@@ -18,7 +18,8 @@ def check_blocks_integrity():
             cur_hash = file_dict['prev_hash']
             cur_proof = file_dict['proof']
             cur_text= file_dict['text']
-            curr_record_id = file_dict['record_id'];
+            cur_record_id = file_dict['record_id'];
+            cur_cnum = file_dict['cnum']
             cur_name = file_dict['name']
             cur_age = file_dict['age']
             cur_gender = file_dict['gender']
@@ -41,7 +42,8 @@ def check_blocks_integrity():
         tmp['block'] = prev_index
         tmp['proof'] = cur_proof
         tmp['text'] = cur_text
-        tmp['record_id'] = curr_record_id
+        tmp['record_id'] = cur_record_id
+        tmp['cnum'] = cur_cnum
         tmp['name'] = cur_name
         tmp['age'] = cur_age
         tmp['gender'] = cur_gender
@@ -130,7 +132,7 @@ def get_POW(file_name, difficulty=1):
         json.dump(cur_block, file, indent=4, ensure_ascii=False)
 
 
-def write_block(text, record_id, vname, vage, vgender, vphy, vuni, vex, vint, vdeath, vevidence, vresult, make_proof=False):
+def write_block(text, record_id, vcnum, vname, vage, vgender, vphy, vuni, vex, vint, vdeath, vevidence, vresult, make_proof=False):
     cur_index = get_next_block()
     prev_index = str(int(cur_index) - 1)
     prev_block_hash = get_hash(prev_index)
@@ -140,6 +142,7 @@ def write_block(text, record_id, vname, vage, vgender, vphy, vuni, vex, vint, vd
             'proof': -1,
             'index': cur_index,
             'record_id': record_id,
+            'cnum': vcnum,
             'name': vname,
             'age': vage,
             'gender': vgender,

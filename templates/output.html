@@ -20,6 +20,7 @@
       <thead>
         <tr>
           <th>Record ID</th>
+          <th>Case Number</th>
           <th>Victim's Name</th>
           <th>Age</th>
           <th>Gender</th>
@@ -36,6 +37,7 @@
         {% for result in results %}
         <tr>
           <td>{{result['record_id'] }}</td>
+          <td>{{result['cnum'] }}</td>
           <td>{{result['name'] }}</td>
           <td>{{result['age'] }}</td>
           <td>{{result['gender'] }}</td>

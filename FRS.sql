@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS `record` (
 	`death` varchar(255) NOT NULL,
   	`evidence` varchar(255) NOT NULL,
     `result` varchar(255) NOT NULL,
+	`casenum` VARCHAR(255),
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
@@ -32,6 +33,7 @@ CREATE TABLE IF NOT EXISTS `bookdata` (
   	`forensicdetail` varchar(255) NOT NULL,  
     `time` varchar(255) NOT NULL,
     `pat_id` varchar(255),
+	`referncenum` varchar(255),
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 

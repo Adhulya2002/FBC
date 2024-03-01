@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Details</title>
+  </head>
+  <body>
+    <div>
+      <a href="book.html">Report Incident</a>
+      <a href="search.html">Search</a>
+      <a href="index.html">Logout</a>
+    </div>
+    <hr />
+    <div class="message">
+      <div><strong>Record ID:</strong> {{ res.id }}</div>
+      <div><strong>Case Number:</strong> {{ res.casenum }}</div>
+      <div><strong>Victim's Name:</strong> {{ res.pname }}</div>
+      <div><strong>Age:</strong> {{ res.age }}</div>
+      <div><strong>Gender:</strong> {{ res.gender }}</div>
+      <div><strong>Physical Charecteristics:</strong> {{ res.phy }}</div>
+      <div><strong>Unique Features:</strong> {{ res.uni }}</div>
+      <div><strong>External Injury:</strong> {{ res.ex }}</div>
+      <div><strong>Internal Injury:</strong> {{ res.in }}</div>
+      <div><strong>Cause of Death:</strong> {{ res.death }}</div>
+      <div><strong>Evidence:</strong> {{ res.evidence }}</div>
+      <div><strong>Examination Result:</strong> {{ res.result }}</div>
+      <br />
+      <hr />
+      <div><strong>CASE CLOSED</strong></div>
+      <hr />
+    </div>
+  </body>
+</html>

@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for,flash
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
 import blockChain
 import os
 import json
+import random
 
 app = Flask(__name__)
 
@@ -17,7 +18,6 @@ app.config['MYSQL_DB'] = 'FRS'
 mysql = MySQL(app)
 username= ''
 
-@app.route('/')
 @app.route('/index')
 def index():
     return render_template('index.html')
@@ -31,6 +31,9 @@ def home():
 @app.route('/panel.html')
 def panel():
     return render_template('panel.html')
+
+def generate_number():
+    return random.randint(1000, 9999)
 
 #temp
 @app.route('/panelhome.html',methods=['get'])
@@ -149,6 +152,7 @@ def adddata():
     else:
         msg = ''
         record_id = request.form['rid']
+        vcnum = request.form['cnum']
         vname = request.form['name']
         vage = request.form['age']
         vgender = request.form['gender']
@@ -159,7 +163,7 @@ def adddata():
         vdeath = request.form['death']
         vevidence = request.form['evidence']
         vresult = request.form['result']
-        text = record_id  + vname + vage + vgender + vphy + vuni + vex + vint + vdeath + vevidence + vresult
+        text = record_id  + vcnum + vname + vage + vgender + vphy + vuni + vex + vint + vdeath + vevidence + vresult
         print(type(text))
         print(text)
         if len(text) < 1:
@@ -168,15 +172,15 @@ def adddata():
             make_proof = request.form['make_proof']
         except Exception:
             make_proof = False
-        blockChain.write_block(text, record_id, vname, vage, vgender, vphy, vuni, vex, vint, vdeath, vevidence, vresult, make_proof)
+        blockChain.write_block(text, record_id, vcnum, vname, vage, vgender, vphy, vuni, vex, vint, vdeath, vevidence, vresult, make_proof)
 
         if not record_id  or not vname or not vage or not vgender or not vphy or not vuni or not vex or not vint or not vdeath or not vevidence or not vresult:
             msg = 'Please Fill All the Fields'
             return render_template('addFRS.html', msg=msg)
         else:
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('INSERT INTO record VALUES (NULL, %s, %s, %s, %s ,%s, %s, %s, %s, %s,%s)',
-                           (vname, vage, vgender ,vphy, vuni, vex, vint, vdeath, vevidence, vresult))
+            cursor.execute('INSERT INTO record VALUES (NULL, %s, %s, %s, %s ,%s, %s, %s, %s, %s,%s,%s)',
+                           (vname, vage, vgender ,vphy, vuni, vex, vint, vdeath, vevidence, vresult, vcnum))
             mysql.connection.commit()
             msg = 'Data Successfully stored into Block chain'
         return render_template('blockchain.html', msg=msg)
@@ -217,7 +221,7 @@ def book_data():
             return render_template('book.html', msg=msg)
         else:
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('INSERT INTO bookdata VALUES (NULL, %s, %s, %s, %s, %s)',
+            cursor.execute('INSERT INTO bookdata VALUES (NULL, %s, %s, %s, %s, %s, %s)',
                            (username, address, forensicdetail, time, patient_id))
             mysql.connection.commit()
             msg = 'Data Successfully stored into Block chain'
@@ -244,30 +248,71 @@ def panellogin():
         else:
             msg = 'Incorrect username/password!'
         return render_template('panel.html', msg=msg)
-    
+
 @app.route('/panelbook', methods=['post', 'get'])
 def panelbook():
     if request.method == "get":
         return f"The URL /data is accessed directly. Try going to '/form' to submit form"
     else:
         msg = ''
+        ref = ''
         username = request.form['name']
         address = request.form['age']
         forensicdetail = request.form['forensicdetail']
         time = request.form['time']
         patient_id = request.form['patid']
+        
+        # Generate a random number
+        referncenum = generate_number()
+        print(referncenum)
+
         if not username or not address or not forensicdetail or not time or not patient_id:
             msg = 'Please Fill All the Fields'
             return render_template('book.html', msg=msg)
         else:
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('INSERT INTO bookdata VALUES (NULL, %s, %s, %s, %s, %s)',
-                           (username, address, forensicdetail, time, patient_id))
+            cursor.execute('INSERT INTO bookdata VALUES (NULL, %s, %s, %s, %s, %s, %s)',
+                           (username, address, forensicdetail, time, patient_id, referncenum))
             mysql.connection.commit()
             msg = 'Data Successfully stored into Block chain'
             print(msg)
-        return render_template('message.html', msg=msg)
+        return render_template('message.html', msg=msg, ref=referncenum)
 
+@app.route('/search.html', methods=['GET'])
+def search_page():
+    return render_template('search.html')
+
+@app.route('/panelsearch', methods=['GET','POST'])
+def search_report_page():
+    # res = ''
+    # msg = ''
+    # casenum = request.form['caseno']
+    # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    # cursor.execute('SELECT * FROM record WHERE casenum = %s', ([casenum],))
+    # account = cursor.fetchone()
+    # print(account)
+    # if account:
+    #     # session['id'] = account['id']    
+    #     return render_template('details.html', res=account)
+    # else:
+    #     msg = 'CASE IN PROGRESS'
+    #     return render_template('search.html', res= msg)
+
+    res = {}
+
+    if request.method == 'POST':
+        casenum = request.form.get('caseno')
+
+        if casenum:
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM record WHERE casenum = %s', ([casenum],))
+            account = cursor.fetchone()
+
+            if account:
+                return render_template('details.html', res=account)
+            
+            res = 'CASE IN PROGRESS'
+    return render_template('search.html', res=res)
 
 @app.route('/pregister', methods=['post', 'get'])
 def pregister():
@@ -307,15 +352,40 @@ def pregister():
 def test():
     return render_template('panel.html')
 
-
 @app.route('/outputTable', methods=['GET'])
 def generate_html_from_json_folder():
     results = blockChain.check_blocks_integrity()
     return render_template('output.html', results=results)
 
-  
+@app.route('/')
+def fetch_row():
+    # Fetch data from the database and pass it to the template
+    data = fetch_data_from_database()
+    return render_template('panelhome.html', data=data)
+
+@app.route('/remove_row/<int:row_id>', methods=['POST'])
+def remove_row(row_id):
+    # Logic to remove the row from the database
+    
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('DELETE FROM bookdata WHERE id = %s', (row_id,))
+    mysql.connection.commit()
+    
+    # Dummy response for demonstration
+    #return jsonify({'message': f'Row {row_id} removed successfully'})
+
+# @app.route('/', methods=['POST'])
+# def handle_post_request():
+#     # Handle other POST requests here
+#     return jsonify({'message': 'Request handled successfully'})
+
+def fetch_data_from_database():
+    # Logic to fetch data from the database
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM bookdata')
+    data = cursor.fetchall()
+    data = fetch_data_from_database()
+    return render_template('panelhome.html', data=data)
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8000)
-
-
-
