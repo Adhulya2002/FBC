@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for,flash
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
@@ -279,6 +279,41 @@ def panelbook():
             print(msg)
         return render_template('message.html', msg=msg, ref=referncenum)
 
+@app.route('/search.html', methods=['GET'])
+def search_page():
+    return render_template('search.html')
+
+@app.route('/panelsearch', methods=['GET','POST'])
+def search_report_page():
+    # res = ''
+    # msg = ''
+    # casenum = request.form['caseno']
+    # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    # cursor.execute('SELECT * FROM record WHERE casenum = %s', ([casenum],))
+    # account = cursor.fetchone()
+    # print(account)
+    # if account:
+    #     # session['id'] = account['id']    
+    #     return render_template('details.html', res=account)
+    # else:
+    #     msg = 'CASE IN PROGRESS'
+    #     return render_template('search.html', res= msg)
+
+    res = {}
+
+    if request.method == 'POST':
+        casenum = request.form.get('caseno')
+
+        if casenum:
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM record WHERE casenum = %s', ([casenum],))
+            account = cursor.fetchone()
+
+            if account:
+                return render_template('details.html', res=account)
+            
+            res = 'CASE IN PROGRESS'
+    return render_template('search.html', res=res)
 
 @app.route('/pregister', methods=['post', 'get'])
 def pregister():
@@ -317,7 +352,6 @@ def pregister():
 @app.route('/test', methods=['GET'])
 def test():
     return render_template('panel.html')
-
 
 @app.route('/outputTable', methods=['GET'])
 def generate_html_from_json_folder():

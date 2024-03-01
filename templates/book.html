@@ -131,71 +131,80 @@
     </style>
   </head>
   <body>
-    <form action="/panelbook" method="post">
-      <div class="form">
-        <div class="title">Welcome</div>
-        <div class="input-container ic1">
-          <input
-            id="name"
-            class="input"
-            type="text"
-            placeholder=" "
-            name="name"
-            required
-          />
-          <div class="cut"></div>
-          <label for="name" class="placeholder">Username</label>
+    <div class="header">
+      <a href="book.html">Report Incident</a>
+      <a href="search.html">Search</a>
+      <a href="index.html">Logout</a>
+    </div>
+    <div>
+      <form action="/panelbook" method="post">
+        <div class="form">
+          <div class="title">Report Incident</div>
+          <div class="input-container ic1">
+            <input
+              id="name"
+              class="input"
+              type="text"
+              placeholder=" "
+              name="name"
+              required
+            />
+            <div class="cut"></div>
+            <label for="name" class="placeholder">Username</label>
+          </div>
+          <div class="input-container ic2">
+            <input
+              id="age"
+              class="input"
+              type="text"
+              placeholder=" "
+              name="age"
+              required
+            />
+            <div class="cut"></div>
+            <label for="age" class="placeholder">Age</label>
+          </div>
+          <div class="input-container ic2">
+            <input
+              id="forensicdetail"
+              class="input"
+              type="text"
+              placeholder=" "
+              name="forensicdetail"
+              required
+            />
+            <div class="cut cut-short"></div>
+            <label for="forensicdetail" class="placeholder"
+              >Forensicdetail</label
+            >
+          </div>
+          <div class="input-container ic2">
+            <input
+              id="time"
+              class="input"
+              type="text"
+              placeholder=" "
+              name="time"
+              required
+            />
+            <div class="cut cut-short"></div>
+            <label for="time" class="placeholder">Time</label>
+          </div>
+          <div class="input-container ic2">
+            <input
+              id="patid"
+              class="input"
+              type="text"
+              placeholder=" "
+              name="patid"
+              required
+            />
+            <div class="cut cut-short"></div>
+            <label for="patid" class="placeholder">Place</label>
+          </div>
+          <button type="submit" class="submit">Submit</button>
         </div>
-        <div class="input-container ic2">
-          <input
-            id="age"
-            class="input"
-            type="text"
-            placeholder=" "
-            name="age"
-            required
-          />
-          <div class="cut"></div>
-          <label for="age" class="placeholder">Age</label>
-        </div>
-        <div class="input-container ic2">
-          <input
-            id="forensicdetail"
-            class="input"
-            type="text"
-            placeholder=" "
-            name="forensicdetail"
-            required
-          />
-          <div class="cut cut-short"></div>
-          <label for="forensicdetail" class="placeholder">Forensicdetail</label>
-        </div>
-        <div class="input-container ic2">
-          <input
-            id="time"
-            class="input"
-            type="text"
-            placeholder=" "
-            name="time"
-            required
-          />
-          <div class="cut cut-short"></div>
-          <label for="time" class="placeholder">Time</label>
-        </div>
-        <div class="input-container ic2">
-          <input
-            id="patid"
-            class="input"
-            type="text"
-            placeholder=" "
-            name="patid"
-            required
-          />
-          <div class="cut cut-short"></div>
-          <label for="patid" class="placeholder">Place</label>
-        </div>
-        <button type="submit" class="submit">Submit</button>
-      </div>
-    </form>
+      </form>
+    </div>
   </body>
 </html>
