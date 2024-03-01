@@ -6,7 +6,7 @@
     <style>
       h1 {
         font-size: 30px;
-        color: #fff;
+        color: black;
         text-transform: uppercase;
         font-weight: 300;
         text-align: center;
@@ -29,8 +29,8 @@
         padding: 20px 15px;
         text-align: left;
         font-weight: 500;
-        font-size: 12px;
-        color: #fff;
+        font-size: 20px;
+        color: black;
         text-transform: uppercase;
       }
       td {
@@ -38,8 +38,8 @@
         text-align: left;
         vertical-align: middle;
         font-weight: 300;
-        font-size: 12px;
-        color: #fff;
+        font-size: 20px;
+        color: black;
         border-bottom: solid 1px rgba(255, 255, 255, 0.1);
       }
 
@@ -47,12 +47,27 @@
 
       @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
       body {
-        background: -webkit-linear-gradient(left, #25c481, #25b7c4);
+        /* background: -webkit-linear-gradient(left, #25c481, #25b7c4);
         background: linear-gradient(to right, #25c481, #25b7c4);
-        font-family: "Roboto", sans-serif;
+        font-family: "Roboto", sans-serif; */
+        background-image: url("/static/img2.avif");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
       }
+
       section {
-        margin: 50px;
+        /*margin: 50px;*/
+        padding: 50px;
+        background-color: rgba(255, 255, 255, 0.5);
+      }
+
+      .container {
+        padding: 80px;
+      }
+
+      h1 {
+        padding-bottom: 20px;
       }
 
       /* follow me template */
@@ -61,9 +76,9 @@
         padding: 10px;
         clear: left;
         text-align: center;
-        font-size: 10px;
+        font-size: 15px;
         font-family: arial;
-        color: #fff;
+        color: white;
       }
       .made-with-love i {
         font-style: normal;
@@ -73,11 +88,24 @@
         top: 2px;
       }
       .made-with-love a {
-        color: #fff;
+        color: white;
         text-decoration: none;
       }
       .made-with-love a:hover {
         text-decoration: underline;
+      }
+
+      .done-btn {
+        display: inline-block;
+        cursor: pointer;
+        text-align: center;
+        border-radius: 8px;
+        color: black;
+        background-color: #0074e4;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        padding-left: 8px;
+        padding-right: 8px;
       }
       /* for custom scrollbar for webkit browser*/
 
@@ -129,47 +157,46 @@
     </script>
   </head>
   <body>
-    <section>
-      <!--for demo wrap-->
-      <h1>Booking Details</h1>
-      <!-- <h1>Welcome Panel {{username}}</h1> -->
-      <div class="tbl-header">
-        <table cellpadding="0" cellspacing="0" border="0">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>USERNAME</th>
-              <th>AGE</th>
-              <th>FORENSICDETATIL</th>
-              <th>TIME</th>
-              <th>PLACE</th>
-              <th>CASE NO.</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-        </table>
-      </div>
+    <div class="container">
+      <section>
+        <h1>Incident Details</h1>
+        <div class="tbl-header">
+          <table cellpadding="0" cellspacing="0" border="0">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>USERNAME</th>
+                <th>AGE</th>
+                <th>FORENSICDETATIL</th>
+                <th>TIME</th>
+                <th>PLACE</th>
+                <th>CASE NO.</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
 
-      <div class="tbl-content">
-        <table cellpadding="0" cellspacing="0" border="0">
-          <tbody>
-            {% for item in data %}
-            <tr>
-              <td>{{item.id}}</td>
-              <td>{{item.username}}</td>
-              <td>{{item.address}}</td>
-              <td>{{item.forensicdetail}}</td>
-              <td>{{item.time}}</td>
-              <td>{{item.pat_id}}</td>
-              <td>{{item.referncenum}}</td>
-              <td><button class="done-btn">Close Case</button></td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </section>
-
+        <div class="tbl-content">
+          <table cellpadding="0" cellspacing="0" border="0">
+            <tbody>
+              {% for item in data %}
+              <tr>
+                <td>{{item.id}}</td>
+                <td>{{item.username}}</td>
+                <td>{{item.address}}</td>
+                <td>{{item.forensicdetail}}</td>
+                <td>{{item.time}}</td>
+                <td>{{item.pat_id}}</td>
+                <td>{{item.referncenum}}</td>
+                <td><button class="done-btn">Close Case</button></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
     <!-- follow me template -->
     <div class="made-with-love">
       <a href="index.html">Home</a>

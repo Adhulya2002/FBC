@@ -35,7 +35,7 @@ def panel():
 def generate_number():
     return random.randint(1000, 9999)
 
-#temp
+
 @app.route('/panelhome.html',methods=['get'])
 def panelhome():
     #username = request.form['username']
@@ -52,7 +52,6 @@ def panelhome():
 @app.route('/users.html')
 def users():
     return render_template('users.html')
-
 
 @app.route('/users_home.html', methods=["post", "get"])
 def users_home():
