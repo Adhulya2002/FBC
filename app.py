@@ -5,6 +5,7 @@ import re
 import blockChain
 import os
 import json
+import random
 
 app = Flask(__name__)
 
@@ -31,6 +32,9 @@ def home():
 @app.route('/panel.html')
 def panel():
     return render_template('panel.html')
+
+def generate_number():
+    return random.randint(1000, 9999)
 
 #temp
 @app.route('/panelhome.html',methods=['get'])
@@ -149,6 +153,7 @@ def adddata():
     else:
         msg = ''
         record_id = request.form['rid']
+        vcnum = request.form['cnum']
         vname = request.form['name']
         vage = request.form['age']
         vgender = request.form['gender']
@@ -159,7 +164,7 @@ def adddata():
         vdeath = request.form['death']
         vevidence = request.form['evidence']
         vresult = request.form['result']
-        text = record_id  + vname + vage + vgender + vphy + vuni + vex + vint + vdeath + vevidence + vresult
+        text = record_id  + vcnum + vname + vage + vgender + vphy + vuni + vex + vint + vdeath + vevidence + vresult
         print(type(text))
         print(text)
         if len(text) < 1:
@@ -168,15 +173,15 @@ def adddata():
             make_proof = request.form['make_proof']
         except Exception:
             make_proof = False
-        blockChain.write_block(text, record_id, vname, vage, vgender, vphy, vuni, vex, vint, vdeath, vevidence, vresult, make_proof)
+        blockChain.write_block(text, record_id, vcnum, vname, vage, vgender, vphy, vuni, vex, vint, vdeath, vevidence, vresult, make_proof)
 
         if not record_id  or not vname or not vage or not vgender or not vphy or not vuni or not vex or not vint or not vdeath or not vevidence or not vresult:
             msg = 'Please Fill All the Fields'
             return render_template('addFRS.html', msg=msg)
         else:
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('INSERT INTO record VALUES (NULL, %s, %s, %s, %s ,%s, %s, %s, %s, %s,%s)',
-                           (vname, vage, vgender ,vphy, vuni, vex, vint, vdeath, vevidence, vresult))
+            cursor.execute('INSERT INTO record VALUES (NULL, %s, %s, %s, %s ,%s, %s, %s, %s, %s,%s,%s)',
+                           (vname, vage, vgender ,vphy, vuni, vex, vint, vdeath, vevidence, vresult, vcnum))
             mysql.connection.commit()
             msg = 'Data Successfully stored into Block chain'
         return render_template('blockchain.html', msg=msg)
@@ -217,7 +222,7 @@ def book_data():
             return render_template('book.html', msg=msg)
         else:
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('INSERT INTO bookdata VALUES (NULL, %s, %s, %s, %s, %s)',
+            cursor.execute('INSERT INTO bookdata VALUES (NULL, %s, %s, %s, %s, %s, %s)',
                            (username, address, forensicdetail, time, patient_id))
             mysql.connection.commit()
             msg = 'Data Successfully stored into Block chain'
@@ -244,29 +249,35 @@ def panellogin():
         else:
             msg = 'Incorrect username/password!'
         return render_template('panel.html', msg=msg)
-    
+
 @app.route('/panelbook', methods=['post', 'get'])
 def panelbook():
     if request.method == "get":
         return f"The URL /data is accessed directly. Try going to '/form' to submit form"
     else:
         msg = ''
+        ref = ''
         username = request.form['name']
         address = request.form['age']
         forensicdetail = request.form['forensicdetail']
         time = request.form['time']
         patient_id = request.form['patid']
+        
+        # Generate a random number
+        referncenum = generate_number()
+        print(referncenum)
+
         if not username or not address or not forensicdetail or not time or not patient_id:
             msg = 'Please Fill All the Fields'
             return render_template('book.html', msg=msg)
         else:
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('INSERT INTO bookdata VALUES (NULL, %s, %s, %s, %s, %s)',
-                           (username, address, forensicdetail, time, patient_id))
+            cursor.execute('INSERT INTO bookdata VALUES (NULL, %s, %s, %s, %s, %s, %s)',
+                           (username, address, forensicdetail, time, patient_id, referncenum))
             mysql.connection.commit()
             msg = 'Data Successfully stored into Block chain'
             print(msg)
-        return render_template('message.html', msg=msg)
+        return render_template('message.html', msg=msg, ref=referncenum)
 
 
 @app.route('/pregister', methods=['post', 'get'])
