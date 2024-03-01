@@ -101,6 +101,32 @@
         })
         .resize();
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        // Attach click event to the "Done" button
+        $("button.done-btn").on("click", function () {
+          var row = $(this).closest("tr");
+          var id = row.find("td:first").text(); // Assuming the ID is in the first column
+          removeRow(id);
+          row.remove();
+        });
+
+        function removeRow(id) {
+          // Send a request to the server to remove the row from the database
+          $.ajax({
+            url: "/remove_row/" + id,
+            method: "POST",
+            success: function (data) {
+              console.log(data);
+            },
+            error: function (error) {
+              console.error("Error:", error);
+            },
+          });
+        }
+      });
+    </script>
   </head>
   <body>
     <section>
@@ -111,13 +137,14 @@
         <table cellpadding="0" cellspacing="0" border="0">
           <thead>
             <tr>
-              <th>S.NO</th>
+              <th>ID</th>
               <th>USERNAME</th>
               <th>AGE</th>
               <th>FORENSICDETATIL</th>
               <th>TIME</th>
               <th>PLACE</th>
               <th>CASE NO.</th>
+              <th>Status</th>
             </tr>
           </thead>
         </table>
@@ -135,6 +162,7 @@
               <td>{{item.time}}</td>
               <td>{{item.pat_id}}</td>
               <td>{{item.referncenum}}</td>
+              <td><button class="done-btn">Close Case</button></td>
             </tr>
             {% endfor %}
           </tbody>

@@ -18,7 +18,6 @@ app.config['MYSQL_DB'] = 'FRS'
 mysql = MySQL(app)
 username= ''
 
-@app.route('/')
 @app.route('/index')
 def index():
     return render_template('index.html')
@@ -358,9 +357,35 @@ def generate_html_from_json_folder():
     results = blockChain.check_blocks_integrity()
     return render_template('output.html', results=results)
 
-  
+@app.route('/')
+def fetch_row():
+    # Fetch data from the database and pass it to the template
+    data = fetch_data_from_database()
+    return render_template('panelhome.html', data=data)
+
+@app.route('/remove_row/<int:row_id>', methods=['POST'])
+def remove_row(row_id):
+    # Logic to remove the row from the database
+    
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('DELETE FROM bookdata WHERE id = %s', (row_id,))
+    mysql.connection.commit()
+    
+    # Dummy response for demonstration
+    #return jsonify({'message': f'Row {row_id} removed successfully'})
+
+# @app.route('/', methods=['POST'])
+# def handle_post_request():
+#     # Handle other POST requests here
+#     return jsonify({'message': 'Request handled successfully'})
+
+def fetch_data_from_database():
+    # Logic to fetch data from the database
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM bookdata')
+    data = cursor.fetchall()
+    data = fetch_data_from_database()
+    return render_template('panelhome.html', data=data)
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8000)
-
-
-
